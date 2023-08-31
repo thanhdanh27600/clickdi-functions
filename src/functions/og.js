@@ -2,7 +2,6 @@ const Handlebars = require("handlebars");
 const puppeteer = require("puppeteer");
 const {app} = require("@azure/functions");
 const {Buffer} = require("buffer");
-const requestIP = require("request-ip");
 
 // Function to decode a base64 string to plain text
 function decodeFromBase64(input) {
@@ -135,12 +134,8 @@ function getFontSize(title = "") {
 app.http("og", {
 	methods: ["GET", "POST"],
 	authLevel: "anonymous",
-	handler: async (request, context) => {
-		context.log(
-			`Http function processed request for url "${
-				request.url
-			}", from ip ${requestIP.getClientIp(request)}`
-		);
+    handler: async (request, context) => {
+		context.log(`Http function processed request for url "${request.url}"`);
 		const titleQuery = request.query.get("title");
 		if (!titleQuery || !isValidBase64(titleQuery)) {
 			return {status: 400, body: "Invalid title"};
