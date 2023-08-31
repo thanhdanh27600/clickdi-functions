@@ -9,17 +9,6 @@ function decodeFromBase64(input) {
 	return buffer.toString("utf-8");
 }
 
-function isValidBase64(input) {
-	try {
-		const buffer = Buffer.from(input, "base64");
-		const decodedString = buffer.toString("utf-8");
-		const reencodedString = Buffer.from(decodedString).toString("base64");
-		return reencodedString === input;
-	} catch (error) {
-		return false;
-	}
-}
-
 const templateHTMLOg = `
 <!DOCTYPE html>
 <html lang="en">
@@ -138,7 +127,7 @@ app.http("og", {
 		context.log(`Http function processed request for url "${request.url}"`);
 		const titleQuery = request.query.get("title");
 		const isPreview = request.query.get("preview") === "true";
-		if (!titleQuery || !isValidBase64(titleQuery)) {
+		if (!titleQuery) {
 			return {status: 400, body: "Invalid title"};
 		}
 		const title = decodeFromBase64(titleQuery);
