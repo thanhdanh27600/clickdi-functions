@@ -134,9 +134,10 @@ function getFontSize(title = "") {
 app.http("og", {
 	methods: ["GET", "POST"],
 	authLevel: "anonymous",
-    handler: async (request, context) => {
+	handler: async (request, context) => {
 		context.log(`Http function processed request for url "${request.url}"`);
 		const titleQuery = request.query.get("title");
+		const isPreview = request.query.get("preview") === "true";
 		if (!titleQuery || !isValidBase64(titleQuery)) {
 			return {status: 400, body: "Invalid title"};
 		}
@@ -153,6 +154,14 @@ app.http("og", {
 			title,
 			styles: compiledStyles,
 		});
+		// return liveview html
+		if (isPreview)
+			return {
+				headers: {
+					"Content-Type": "text/html",
+				},
+				body: compiledHTML,
+			};
 
 		// puppeteer render and screenshot
 		const browser = await puppeteer.launch({
@@ -200,7 +209,10 @@ app.http("og", {
 		});
 
 		const element = await page.$("#body");
-		const image = await element?.screenshot({type: "jpeg"});
+		const image = await element?.screenshot({
+			type: "jpeg",
+			optimizeForSpeed: true,
+		});
 		await browser.close();
 		return {
 			headers: {
