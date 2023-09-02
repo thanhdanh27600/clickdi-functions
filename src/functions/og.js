@@ -1,13 +1,10 @@
 const Handlebars = require("handlebars");
 const puppeteer = require("puppeteer");
 const {app} = require("@azure/functions");
-const {Buffer} = require("buffer");
+const base64url = require('base64url');
 
-// Function to decode a base64 string to plain text
-function decodeFromBase64(input) {
-	const buffer = Buffer.from(input, "base64");
-	return buffer.toString("utf-8");
-}
+export const encodeBase64 = base64url.encode
+export const decodeBase64 = base64url.decode
 
 const templateHTMLOg = `
 <!DOCTYPE html>
@@ -130,7 +127,7 @@ app.http("og", {
 		if (!titleQuery) {
 			return {status: 400, body: "Invalid title"};
 		}
-		const title = decodeFromBase64(titleQuery);
+		const title = decodeBase64(titleQuery);
 		// const locale = req.body.locale;
 		// const hash = req.body.hash;
 
