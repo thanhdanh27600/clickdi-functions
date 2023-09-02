@@ -1,10 +1,10 @@
 const Handlebars = require("handlebars");
 const puppeteer = require("puppeteer");
-const {app} = require("@azure/functions");
-const base64url = require('base64url');
+const { app } = require("@azure/functions");
+const base64url = require("base64url");
 
-export const encodeBase64 = base64url.encode
-export const decodeBase64 = base64url.decode
+export const encodeBase64 = base64url.encode;
+export const decodeBase64 = base64url.decode;
 
 const templateHTMLOg = `
 <!DOCTYPE html>
@@ -125,7 +125,7 @@ app.http("og", {
 		const titleQuery = request.query.get("title");
 		const isPreview = request.query.get("preview") === "true";
 		if (!titleQuery) {
-			return {status: 400, body: "Invalid title"};
+			return { status: 400, body: "Invalid title" };
 		}
 		const title = decodeBase64(titleQuery);
 		// const locale = req.body.locale;
@@ -171,7 +171,7 @@ app.http("og", {
 		const page = await browser.newPage();
 
 		// Set the content to our rendered HTML
-		await page.setContent(compiledHTML, {waitUntil: "domcontentloaded"});
+		await page.setContent(compiledHTML, { waitUntil: "domcontentloaded" });
 		// Wait until all images and fonts have loaded
 		await page.evaluate(async () => {
 			const selectors = Array.from(document.querySelectorAll("img"));
