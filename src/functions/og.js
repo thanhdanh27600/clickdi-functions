@@ -3,8 +3,8 @@ const puppeteer = require("puppeteer");
 const { app } = require("@azure/functions");
 const base64url = require("base64url");
 
-export const encodeBase64 = base64url.encode;
-export const decodeBase64 = base64url.decode;
+const encodeBase64 = base64url.encode;
+const decodeBase64 = base64url.decode;
 
 const templateHTMLOg = `
 <!DOCTYPE html>
@@ -118,6 +118,7 @@ function getFontSize(title = "") {
 }
 
 app.http("og", {
+	route:"api/og",
 	methods: ["GET", "POST"],
 	authLevel: "anonymous",
 	handler: async (request, context) => {
