@@ -118,7 +118,6 @@ function getFontSize(title = "") {
 }
 
 app.http("og", {
-	route:"api/og",
 	methods: ["GET", "POST"],
 	authLevel: "anonymous",
 	handler: async (request, context) => {
