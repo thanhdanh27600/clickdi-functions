@@ -1,6 +1,6 @@
 const Handlebars = require("handlebars");
 const puppeteer = require("puppeteer");
-const { app } = require("@azure/functions");
+const {app} = require("@azure/functions");
 const base64url = require("base64url");
 
 const encodeBase64 = base64url.encode;
@@ -20,13 +20,11 @@ const templateHTMLOg = `
         {{#if logoUrl}}
           <img src="{{logoUrl}}" alt="logo" />
         {{else}}
-          <span>CLICKDI.top</span>
+          <span>CLICKDI</span>
         {{/if}}
       </div>
       <div class="title">{{title}}</div>
-      <div>
-       
-      </div>
+      <div></div>
     </main>
   </body>
 </html>
@@ -41,12 +39,11 @@ const templateStylesOg = `
   font-family: monospace;
 }
 body {
-  padding: 3rem;
+  background: linear-gradient(to right, #2cdfdf, #69009e);
   margin: 0;
   width: 1200px;
   height: 630px;
   overflow: hidden;
-  background: #06b6d4;
   {{#if bgUrl}}
   background-image: url({{bgUrl}});
   background-position: center;
@@ -63,30 +60,31 @@ main {
   display: flex;
   flex-direction: column;
   justify-content: space-between;
-  border: 4px double;
   padding: 2rem;
+  padding-top: 0;
 }
 .logo {
   width: fit-content;
   align-self: center;
-  height: 3rem;
+  background: aliceblue;
+  color: darkcyan;
 }
 .logo img {
   width: 100%;
   height: 100%;
 }
 .logo span {
-  font-size: 1rem;
+  font-size: 1.5rem;
   padding: 0.5rem;
   display: flex;
   justify-content: center;
-  border: 1px dashed;
+  font-weight: bold;
 }
 .title {
   font-size: {{fontSize}};
   margin: 0.25rem;
   font-weight: bold;
-  color: #fff;
+  color: cornsilk;
   text-shadow: .15em .15em 0 hsl(200 50% 30%);
 }
 .tags {
@@ -125,9 +123,10 @@ app.http("og", {
 		const titleQuery = request.query.get("title");
 		const isPreview = request.query.get("preview") === "true";
 		if (!titleQuery) {
-			return { status: 400, body: "Invalid title" };
+			return {status: 400, body: "Invalid title"};
 		}
 		const title = decodeBase64(titleQuery);
+		console.log('title', title)
 		// const locale = req.body.locale;
 		// const hash = req.body.hash;
 
@@ -171,7 +170,7 @@ app.http("og", {
 		const page = await browser.newPage();
 
 		// Set the content to our rendered HTML
-		await page.setContent(compiledHTML, { waitUntil: "domcontentloaded" });
+		await page.setContent(compiledHTML, {waitUntil: "domcontentloaded"});
 		// Wait until all images and fonts have loaded
 		await page.evaluate(async () => {
 			const selectors = Array.from(document.querySelectorAll("img"));
