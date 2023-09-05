@@ -60,7 +60,7 @@ main {
   display: flex;
   flex-direction: column;
   justify-content: space-between;
-  padding: 2rem;
+  padding: 0rem 4rem;
   padding-top: 0;
 }
 .logo {
