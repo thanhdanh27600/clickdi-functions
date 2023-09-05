@@ -41,7 +41,7 @@ jobs:
           app-name: 'clickdi-og'
           slot-name: 'Production'
           package: ${{ env.AZURE_FUNCTIONAPP_PACKAGE_PATH }}
-          publish-profile: ${{ secrets.AZUREAPPSERVICE_PUBLISHPROFILE_BD78E351035C493C8B670242B3C97A2B }}
+          publish-profile: ${{ secrets.AZUREAPPSERVICE_PUBLISHPROFILE_801B02BA0A6E470E980DAF95747A1BEB }}
           scm-do-build-during-deployment: true
           enable-oryx-build: true
           respect-funcignore: true
