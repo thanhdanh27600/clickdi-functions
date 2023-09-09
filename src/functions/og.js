@@ -39,22 +39,15 @@ const templateStylesOg = `
   font-family: monospace;
 }
 body {
-  background: linear-gradient(to right, #2cdfdf, #69009e);
+  background-image: {{background}};
+  background-repeat: no-repeat;
+  background-size: 1200px 630px;
   margin: 0;
   width: 1200px;
   height: 630px;
   overflow: hidden;
-  {{#if bgUrl}}
-  background-image: url({{bgUrl}});
-  background-position: center;
-  background-repeat: no-repeat;
-  background-size: cover;
-  {{else}}
-  color: black;
-  {{/if}}
 }
 main {
-  box-shadow: rgba(0, 0, 0, 0.25) 0px 54px 55px, rgba(0, 0, 0, 0.12) 0px -12px 30px, rgba(0, 0, 0, 0.12) 0px 4px 6px, rgba(0, 0, 0, 0.17) 0px 12px 13px, rgba(0, 0, 0, 0.09) 0px -3px 5px;
   height: 100%;
   width: 100%;
   display: flex;
@@ -84,7 +77,7 @@ main {
   font-size: {{fontSize}};
   margin: 0.25rem;
   font-weight: bold;
-  color: cornsilk;
+  color: {{textColor}};
   text-shadow: .15em .15em 0 hsl(200 50% 30%);
 }
 .tags {
@@ -102,6 +95,24 @@ main {
   font-size: 1.25rem;
 }
 `;
+
+const backgroundTemplate = {
+	default: "linear-gradient(to bottom, #69009e, #2cdfdf)",
+	jshine: "linear-gradient(to bottom, #12c2e9, #c471ed,#f64f59)",
+	azure_pop: "linear-gradient(to bottom, #ef32d9, #89fffd)",
+	king_yna: "linear-gradient(to bottom, #1a2a6c, #b21f1f, #fdbb2d)",
+	quepal: "linear-gradient(to bottom, #11998e, #38ef7d)",
+	sublime_vivid: "linear-gradient(to bottom, #FC466B, #3F5EFB)",
+};
+
+const textColorTemplate = {
+	default: "cornsilk",
+	jshine: "blanchedalmond",
+	azure_pop: "azure",
+	king_yna: "floralwhite",
+	quepal: "cornsilk",
+	sublime_vivid: "floralwhite",
+};
 
 // Get dynamic font size for title depending on its length
 function getFontSize(title = "") {
@@ -121,18 +132,22 @@ app.http("og", {
 	handler: async (request, context) => {
 		context.log(`Http function processed request for url "${request.url}"`);
 		const titleQuery = request.query.get("title");
+		const theme = request.query.get("theme") || "default";
 		const isPreview = request.query.get("preview") === "true";
 		if (!titleQuery) {
 			return {status: 400, body: "Invalid title"};
 		}
 		const title = decodeBase64(titleQuery);
-		console.log('title', title)
+		console.log("title", title);
+		console.log("theme", theme);
 		// const locale = req.body.locale;
 		// const hash = req.body.hash;
 
 		// compile templateStyles
 		const compiledStyles = Handlebars.compile(templateStylesOg)({
 			fontSize: getFontSize(title),
+			background: backgroundTemplate[theme],
+			textColor: textColorTemplate[theme],
 		});
 		// compile templateHTML
 		const compiledHTML = Handlebars.compile(templateHTMLOg)({
