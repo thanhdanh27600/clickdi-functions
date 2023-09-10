@@ -20,7 +20,7 @@ const templateHTMLOg = `
         {{#if logoUrl}}
           <img src="{{logoUrl}}" alt="logo" />
         {{else}}
-          <span>CLICKDI</span>
+          <span>quickshare.at</span>
         {{/if}}
       </div>
       <div class="title">{{title}}</div>
